@@ -1,0 +1,25 @@
+{
+  "name": "grove-react-visjs-graph",
+  "version": "0.1.0",
+  "description": "React components to visualize RDF relationships",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://project.marklogic.com/repo/scm/~pmcelwee/grove-react-visjs-graph.git"
+  },
+  "keywords": [
+    "MarkLogic",
+    "Grove",
+    "visjs",
+    "graph",
+    "RDF",
+    "SPARQL",
+    "visualization",
+    "UI"
+  ],
+  "author": "Patrick McElwee <patrick.mcelwee@marklogic.com> (marklogic.com)",
+  "license": "Apache-2.0"
+}
