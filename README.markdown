@@ -9,7 +9,7 @@ The library is part of the MarkLogic Grove project, but could work in any React 
 
 ## Installation
 
-First, add the `grove-react-visjs-graph` dependency via npm:
+First, add the `grove-react-visjs-graph` dependency via npm. (In a Grove Project, you will want to do this inside the `ui` directory.)
 
     npm install --save https://project.marklogic.com/repo/scm/~pmcelwee/grove-react-visjs-graph.git
 
