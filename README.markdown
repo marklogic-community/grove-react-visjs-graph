@@ -11,11 +11,18 @@ The library is part of the MarkLogic Grove project, but could work in any React 
 
 First, add the `grove-react-visjs-graph` dependency via npm. (In a Grove Project, you will want to do this inside the `ui` directory.)
 
-    npm install --save https://project.marklogic.com/repo/scm/~pmcelwee/grove-react-visjs-graph.git
+    npm install --save git+https://project.marklogic.com/repo/scm/~pmcelwee/grove-react-visjs-graph.git
 
 Then, in your application, import the `GraphContainer` and start to use it:
 
 ```javascript
+// ... other imports ...
+import { GraphContainer } from 'grove-react-visjs-graph';
+
+// ...
+// ... other stuff in the parent component
+  <GraphContainer />
+// ...
 ```
 
 ## Defaults

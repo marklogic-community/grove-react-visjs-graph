@@ -4,6 +4,7 @@
   "description": "React components to visualize RDF relationships",
   "main": "dist/index.js",
   "scripts": {
+    "build": "npm run lint && webpack -p",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "npm run lint && jest",
@@ -26,10 +27,10 @@
   "author": "Patrick McElwee <patrick.mcelwee@marklogic.com> (marklogic.com)",
   "license": "Apache-2.0",
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.2",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
     "canvas-prebuilt": "^1.6.11",
     "css-loader": "^1.0.0",
     "enzyme": "^3.6.0",
@@ -38,12 +39,14 @@
     "eslint-config-prettier": "^3.0.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.11.1",
+    "file-loader": "^2.0.0",
     "jest": "^23.6.0",
     "prettier": "^1.14.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "style-loader": "^0.23.0",
-    "webpack": "^4.18.0"
+    "webpack": "^4.18.0",
+    "webpack-cli": "^3.1.0"
   },
   "peerDependencies": {
     "react": "^16.0.0",
