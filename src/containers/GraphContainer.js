@@ -32,17 +32,16 @@ class GraphContainer extends React.Component {
       {
         credentials: 'same-origin'
       }
-    );
+    ).then(response => {
+      if (!response.ok) {
+        throw new Error('Network error getting graph data');
+      }
+      return response.json();
+    });
   }
 
   updateNodesAndEdges(uris) {
     this.fetchData(uris)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network error getting graph data');
-        }
-        return response.json();
-      })
       .then(newData => {
         this.setState(prevState => ({
           data: {

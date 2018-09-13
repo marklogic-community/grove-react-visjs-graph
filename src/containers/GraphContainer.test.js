@@ -1,17 +1,13 @@
 /* eslint-env jest */
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import GraphContainer from './GraphContainer';
 import nock from 'nock';
 
 describe('<GraphContainer/>', () => {
-  it('works', () => {
-    expect(shallow(<GraphContainer startingUris={[]} />).length).toEqual(1);
-  });
-
   it('calls backend API', () => {
     const mockCall = jest.fn();
-    mockCall.mockReturnValue(Promise.resolve({}));
+    mockCall.mockReturnValue(Promise.resolve({ nodes: [], edges: [] }));
     mount(<GraphContainer startingUris={[]} fetchData={mockCall} />);
     expect(mockCall).toHaveBeenCalledWith([]);
   });
