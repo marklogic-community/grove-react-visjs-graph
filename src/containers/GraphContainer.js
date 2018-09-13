@@ -20,8 +20,11 @@ class GraphContainer extends React.Component {
     };
   }
 
-  updateNodesAndEdges(uris) {
-    fetch(
+  fetchData(uris) {
+    if (this.props.fetchData) {
+      return this.props.fetchData(uris);
+    }
+    return fetch(
       new URL(
         '/v1/resources/visjs?rs:subjects=' + uris,
         document.baseURI
@@ -29,14 +32,14 @@ class GraphContainer extends React.Component {
       {
         credentials: 'same-origin'
       }
-    )
+    );
+  }
+
+  updateNodesAndEdges(uris) {
+    this.fetchData(uris)
       .then(response => {
         if (!response.ok) {
-          return response.json().then(error => {
-            // eslint-disable-next-line no-console
-            console.error('Error getting graph data:', error); // throw new Error(error.message);
-            return { nodes: [], edges: [] };
-          });
+          throw new Error('Network error getting graph data');
         }
         return response.json();
       })
@@ -47,11 +50,16 @@ class GraphContainer extends React.Component {
             edges: [].concat(prevState.data.edges, newData.edges)
           }
         }));
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        return { nodes: [], edges: [] };
       });
   }
 
   componentDidMount() {
-    this.updateNodesAndEdges(this.props.originalUris);
+    this.updateNodesAndEdges(this.props.startingUris);
   }
 
   render() {
@@ -66,7 +74,8 @@ class GraphContainer extends React.Component {
 }
 
 GraphContainer.propTypes = {
-  originalUris: PropTypes.arrayOf(PropTypes.string)
+  startingUris: PropTypes.arrayOf(PropTypes.string).isRequired,
+  fetchData: PropTypes.func
 };
 
 export default GraphContainer;
