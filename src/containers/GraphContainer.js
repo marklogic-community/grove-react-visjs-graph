@@ -15,7 +15,9 @@ class GraphContainer extends React.Component {
     this.events = {
       doubleClick: params => {
         const nodeURI = params.nodes[0];
-        this.updateNodesAndEdges([nodeURI]);
+        if (nodeURI) {
+          this.updateNodesAndEdges([nodeURI]);
+        }
       }
     };
   }
@@ -41,6 +43,9 @@ class GraphContainer extends React.Component {
   }
 
   updateNodesAndEdges(uris) {
+    if (!uris) {
+      return;
+    }
     this.fetchData(uris)
       .then(newData => {
         this.setState(prevState => ({
@@ -51,8 +56,7 @@ class GraphContainer extends React.Component {
         }));
       })
       .catch(error => {
-        // eslint-disable-next-line no-console
-        console.error(error);
+        console.error(error); // eslint-disable-line no-console
         return { nodes: [], edges: [] };
       });
   }

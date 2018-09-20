@@ -12,6 +12,15 @@ describe('<GraphContainer/>', () => {
     expect(mockCall).toHaveBeenCalledWith([]);
   });
 
+  it('does nothing without startingUris', () => {
+    const mockCall = jest.fn();
+    // stubbing response so test failure is understandable, but
+    // do not expect it to actually reach the mockCall
+    mockCall.mockReturnValue(Promise.resolve({ nodes: [], edges: [] }));
+    mount(<GraphContainer fetchData={mockCall} />);
+    expect(mockCall).not.toHaveBeenCalled();
+  });
+
   describe('with default API', () => {
     afterEach(nock.cleanAll);
 

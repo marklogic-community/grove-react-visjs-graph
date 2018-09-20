@@ -21,9 +21,11 @@ import { GraphContainer } from 'grove-react-visjs-graph';
 
 // ...
 // ... other stuff in the parent component
-  <GraphContainer />
+  <GraphContainer startingUris={['/sample-data/data-268.json']} />
 // ...
 ```
+
+The `startingUris` refers to RDF URIs (see the "Data Source" section below for details.)
 
 The `GraphContainer` is a convenience container, which attempts to fetch graph data and pass it down to the more generic `Graph` component. The follow section describes the default behavior of the `GraphContainer` and how to customize it.
 
@@ -39,6 +41,10 @@ The provided `GraphContainer` calls a backend service, providing subject IRIs as
 
 A usable example of such an endpoint is available in the [mlpm-visjs-graph repository](https://github.com/patrickmcelwee/mlpm-visjs-graph). You will need to install [visjs.xqy](https://github.com/patrickmcelwee/mlpm-visjs-graph/blob/master/visjs.xqy) as a REST resource and [visjs-lib.xqy](https://github.com/patrickmcelwee/mlpm-visjs-graph/blob/master/visjs-lib.xqy) as a server-side javascript module. You can customize the behavior by editing these files directly, particularly the SPARQL queries in visjs-lib.xqy.
 
+See the README in the mlpm-visjs-graph library on how to install it.
+
+NOTE: Eventually, we would like to replace this library with a default Grove middle-tier endpoint.
+
 #### Events
 
 The provided `GraphContainer` also sets up a single doubleClick event, which fetches nodes and edges for the node that was double-clicked and adds them to the graph.
@@ -47,7 +53,50 @@ The provided `GraphContainer` also sets up a single doubleClick event, which fet
 
 ### Data Source
 
-To change the basic behavior pass in fetchData function, which takes an array of IRIs as its only argument and returns a Visjs-style serialization of nodes and edges.
+To change the basic behavior pass in a `fetchData()` function, which takes an array of URIs as its only argument and returns a Visjs-style serialization of nodes and edges.
+
+```javascript
+const myFetchData = uris => {
+  // Inspect the source of visjs examples to see what properties nodes and
+  // edges can have. Note that you can use arrays and do not need to 
+  // instantiate a visjs DataSet.
+  // http://visjs.org/network_examples.html
+  // Normally, of course, you will call out to a data service in MarkLogic,
+  // a MarkLogic Grove middle-tier, or some other backend API.
+  // Note that you need to return a Promise.
+  return Promise.resolve({
+    nodes: [
+      {
+        id: '1',
+        label: 'The Number 1!',
+        group: 'number', // optional
+        linkCount: 8 // we look for this to add an small orb to the icon
+      },
+      {
+        id: '2',
+        label: 'The Only Even Prime!',
+        group: 'number', // optional
+        linkCount: 16 // we look for this to add an small orb to the icon
+      }
+    ],
+    edges: [
+      {
+        id: 'more-2-1',
+        label: 'moreThan',
+        from: '2',
+        to: '1'
+      }
+    ]
+  });
+};
+
+// ...
+  <GraphContainer
+    startingUris={['https://marklogic.com#MarkLogicGrove']}
+    fetchData={myFetchData}
+  />
+// ...
+```
 
 ### Events
 
