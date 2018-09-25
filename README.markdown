@@ -49,6 +49,8 @@ NOTE: Eventually, we would like to replace this library with a default Grove mid
 
 The provided `GraphContainer` also sets up a single doubleClick event, which fetches nodes and edges for the node that was double-clicked and adds them to the graph.
 
+The underlying ml-visjs-graph.ng library also sets up an `afterDrawing` event, which draws a custom orb in the top-left of each node, which contains a number specifying how many relationships that node has (or whatever else you wish to interpret the `linkCount` property on each node to mean).
+
 ### `GraphContainer` Customization
 
 ### Data Source
@@ -100,7 +102,21 @@ const myFetchData = uris => {
 
 ### Events
 
-TODO
+VisJS provides [many event hooks for you to add behavior or draw on the canvas](http://visjs.org/docs/network/#Events). See above for the events added by default. You can override these or add additional event hooks by passing an object as an `events` option to the `<GraphContainer />`. (If you want to remove one of the event hooks defined in this library, you will have to specify an empty, 'no-op' function.)
+
+For example, here is an 'oncontext' event handler (fired when you right-click on a node):
+
+```javascript
+<GraphContainer
+  startingUris={['https://marklogic.com#MarkLogicGrove']}
+  events={{
+    oncontext: params => {
+      params.event.preventDefault();
+      console.log('Visjs right-click action called with params: ', params);
+    } 
+  }}
+/>
+```
 
 ### Display options
 

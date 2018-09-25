@@ -12,14 +12,17 @@ class GraphContainer extends React.Component {
         edges: []
       }
     };
-    this.events = {
-      doubleClick: params => {
-        const nodeURI = params.nodes[0];
-        if (nodeURI) {
-          this.updateNodesAndEdges([nodeURI]);
+    this.events = Object.assign(
+      {
+        doubleClick: params => {
+          const nodeURI = params.nodes[0];
+          if (nodeURI) {
+            this.updateNodesAndEdges([nodeURI]);
+          }
         }
-      }
-    };
+      },
+      props.events
+    );
   }
 
   fetchData(uris) {
