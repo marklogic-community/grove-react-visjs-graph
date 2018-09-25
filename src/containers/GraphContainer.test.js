@@ -52,6 +52,14 @@ describe('<GraphContainer/>', () => {
       const graph = wrapper.find(Graph);
       expect(graph.props().options).toBe(myOptions);
     });
+
+    it('passes through layout', () => {
+      const wrapper = shallow(
+        <GraphContainer fetchData={mockCall} layout={'myLayout'} />
+      );
+      const graph = wrapper.find(Graph);
+      expect(graph.props().layout).toBe('myLayout');
+    });
   });
 
   describe('with default API', () => {

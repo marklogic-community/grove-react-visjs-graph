@@ -142,6 +142,26 @@ For example:
 />
 ```
 
+#### Specify Layout
+
+The underlying ml-visjs-graph.js library provides a few different layout options. Those include:
+
+- "standard" (force-directed)
+- "hierarchyTop"
+- "hierarchyBottom"
+- "hierarchyLeft"
+- "hierarchyRight"
+
+You can specify which layout you want, by passing in, for example,
+`layout="'hierarchyTop'"`. The default is 'standard'.
+
+```javascript
+<GraphContainer
+  startingUris={['https://marklogic.com#MarkLogicGrove']}
+  layout={'hierarchyTop'}
+/>
+```
+
 ## `Graph` Component
 
 Instead of using the provided `GraphContainer`, you can use the lower-level `Graph` component instead, which gives you more control on how to fetch data to initialize the graph and to update it. See the `GraphContainer` itself for an example of how to use it.

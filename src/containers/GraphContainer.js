@@ -74,6 +74,7 @@ class GraphContainer extends React.Component {
         options={this.props.options}
         data={this.state.data}
         events={this.events}
+        layout={this.props.layout}
       />
     );
   }

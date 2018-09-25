@@ -78,6 +78,10 @@ class Graph extends React.Component {
         if (this.props.options) {
           graph.network.setOptions(this.props.options);
         }
+
+        if (this.props.layout) {
+          graph.network.setLayout(this.props.layout);
+        }
       }
     );
   }
