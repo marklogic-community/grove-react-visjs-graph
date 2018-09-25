@@ -121,7 +121,27 @@ For example, here is an 'oncontext' event handler (fired when you right-click on
 ### Display options
 
 TODO: add physics on-off, physics solver and layout as props to Graph
- 
+
+VisJS provides a [robust set of options to change how your graph is displayed](http://visjs.org/docs/network/#options). We have specified a default set of options in the [underlying ml-visjs-graph.js library](https://github.com/grtjn/ml-visjs-graph.js/blob/master/src/mlvisjs.global.js#L50). You can override these by passing a VisJS options object as an `options` prop to your `<GraphContainer />`. (Only the specific options you name will be changed. If you want to return to the VisJS default for an option that we have set in the visjsGraphCtrl, you will have to specify that explicitly.)
+
+For example:
+
+```javascript
+<GraphContainer
+  startingUris={['https://marklogic.com#MarkLogicGrove']}
+  options={{
+    edges: {
+      color: 'red'
+    },
+    nodes: {
+      color: {
+        background: 'orange'
+      }
+    }
+  }}
+/>
+```
+
 ## `Graph` Component
 
 Instead of using the provided `GraphContainer`, you can use the lower-level `Graph` component instead, which gives you more control on how to fetch data to initialize the graph and to update it. See the `GraphContainer` itself for an example of how to use it.

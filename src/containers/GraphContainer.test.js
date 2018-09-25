@@ -43,6 +43,15 @@ describe('<GraphContainer/>', () => {
       const graph = wrapper.find(Graph);
       expect(graph.props().events.doubleClick).toBe(myDoubleClick);
     });
+
+    it('passes through options', () => {
+      const myOptions = { edges: { color: 'blue' } };
+      const wrapper = shallow(
+        <GraphContainer fetchData={mockCall} options={myOptions} />
+      );
+      const graph = wrapper.find(Graph);
+      expect(graph.props().options).toBe(myOptions);
+    });
   });
 
   describe('with default API', () => {
