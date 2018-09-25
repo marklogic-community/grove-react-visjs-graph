@@ -82,6 +82,10 @@ class Graph extends React.Component {
         if (this.props.layout) {
           graph.network.setLayout(this.props.layout);
         }
+
+        if (this.props.physics !== undefined) {
+          graph.network.setPhysics(this.props.physics);
+        }
       }
     );
   }

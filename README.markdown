@@ -162,6 +162,12 @@ You can specify which layout you want, by passing in, for example,
 />
 ```
 
+#### Specify Physics
+
+You can also specify a different physics for the 'standard' (default) layout: `physics={ 'barnesHut' }`
+
+Or turn off physics initially with `physics={false}`.
+
 ## `Graph` Component
 
 Instead of using the provided `GraphContainer`, you can use the lower-level `Graph` component instead, which gives you more control on how to fetch data to initialize the graph and to update it. See the `GraphContainer` itself for an example of how to use it.

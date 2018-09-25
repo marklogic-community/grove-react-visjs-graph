@@ -75,6 +75,7 @@ class GraphContainer extends React.Component {
         data={this.state.data}
         events={this.events}
         layout={this.props.layout}
+        physics={this.props.physics}
       />
     );
   }
@@ -82,7 +83,11 @@ class GraphContainer extends React.Component {
 
 GraphContainer.propTypes = {
   startingUris: PropTypes.arrayOf(PropTypes.string).isRequired,
-  fetchData: PropTypes.func
+  fetchData: PropTypes.func,
+  events: PropTypes.object,
+  options: PropTypes.object,
+  layout: PropTypes.string,
+  physics: PropTypes.oneOfType([PropTypes.string, PropTypes.boolean])
 };
 
 export default GraphContainer;

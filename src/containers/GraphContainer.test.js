@@ -60,6 +60,14 @@ describe('<GraphContainer/>', () => {
       const graph = wrapper.find(Graph);
       expect(graph.props().layout).toBe('myLayout');
     });
+
+    it('passes through physics', () => {
+      const wrapper = shallow(
+        <GraphContainer fetchData={mockCall} physics={'myPhysics'} />
+      );
+      const graph = wrapper.find(Graph);
+      expect(graph.props().physics).toBe('myPhysics');
+    });
   });
 
   describe('with default API', () => {
