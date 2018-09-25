@@ -100,6 +100,8 @@ const myFetchData = uris => {
 // ...
 ```
 
+See the VisJS [nodes](http://visjs.org/docs/network/nodes.html) and [edges](http://visjs.org/docs/network/edges.html) documentation for additional VisJS properties you can add. You may also add additional, non-VisJS properties if you wish (for example, to provide content to a summary pane when a node is clicked).
+
 ### Events
 
 VisJS provides [many event hooks for you to add behavior or draw on the canvas](http://visjs.org/docs/network/#Events). See above for the events added by default. You can override these or add additional event hooks by passing an object as an `events` option to the `<GraphContainer />`. (If you want to remove one of the event hooks defined in this library, you will have to specify an empty, 'no-op' function.)
@@ -175,3 +177,8 @@ Instead of using the provided `GraphContainer`, you can use the lower-level `Gra
 It takes props similar to the `GraphContainer` for events and display options.
 
 In addition, it takes a `data` prop, which is additive. Any new data gets added to the existing visjs graph.
+
+## More Information
+
+I recommend becoming familiar with the [documentation for a VisJS network](http://visjs.org/docs/network/).
+
