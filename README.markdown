@@ -133,7 +133,9 @@ For example:
   startingUris={['https://marklogic.com#MarkLogicGrove']}
   options={{
     edges: {
-      color: 'red'
+      color: {
+        color: 'red'
+      }
     },
     nodes: {
       color: {
