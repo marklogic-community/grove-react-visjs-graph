@@ -1,6 +1,6 @@
 {
   "name": "grove-react-visjs-graph",
-  "version": "0.10.0-beta",
+  "version": "0.10.0-beta.1",
   "description": "React components to visualize RDF relationships",
   "main": "dist/index.js",
   "scripts": {
