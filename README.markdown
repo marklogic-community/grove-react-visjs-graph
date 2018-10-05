@@ -41,7 +41,17 @@ The provided `GraphContainer` calls a backend service, providing subject IRIs as
 
 A usable example of such an endpoint is available in the [mlpm-visjs-graph repository](https://github.com/patrickmcelwee/mlpm-visjs-graph). You will need to install [visjs.xqy](https://github.com/patrickmcelwee/mlpm-visjs-graph/blob/master/visjs.xqy) as a REST resource and [visjs-lib.xqy](https://github.com/patrickmcelwee/mlpm-visjs-graph/blob/master/visjs-lib.xqy) as a server-side javascript module. You can customize the behavior by editing these files directly, particularly the SPARQL queries in visjs-lib.xqy.
 
-See the README in the mlpm-visjs-graph library on how to install it.
+See the README in the mlpm-visjs-graph library on how to install it on MarkLogic.
+
+You will then either have to setup an endpoint in your Grove middle-tier that calls this REST extension, or add a legacy proxy (not recommended in general). (Eventually, we hope to spec out and ship a middle-tier endpoint.)
+
+To add a proxy in an out-of-the-box Grove middle-tier, open `routes/index.js` and inside the `whitelist`, add:
+
+    {
+      endpoint: '/resources/visjs,
+      methods: ['get'],
+      authed: true
+    }
 
 NOTE: Eventually, we would like to replace this library with a default Grove middle-tier endpoint.
 
