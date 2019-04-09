@@ -65,6 +65,8 @@
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/test/styleMock.js"
     },
-    "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js"
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setupTests.js"
+    ]
   }
 }
