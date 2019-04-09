@@ -1,6 +1,6 @@
 {
   "name": "@marklogic-community/grove-react-visjs-graph",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "description": "React components to visualize RDF relationships",
   "main": "dist/index.js",
   "scripts": {
