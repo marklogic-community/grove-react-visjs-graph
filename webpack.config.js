@@ -2,9 +2,12 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    index: './src/index.js',
+    demo: './src/demo.js'
+  },
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     library: 'grove-react-visjs-graph',
     libraryTarget: 'umd',
@@ -36,5 +39,10 @@ module.exports = {
         ]
       }
     ]
+  },
+  devServer: {
+    contentBase: [path.join(__dirname, 'dist'), path.join(__dirname, 'public')],
+    compress: true,
+    port: 9000
   }
 };

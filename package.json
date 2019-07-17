@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npm run lint && webpack -p",
     "build:dev": "npm run lint && webpack --mode=development",
+    "start:dev": "webpack-dev-server",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "npm run lint && jest",
@@ -58,7 +59,6 @@
   "dependencies": {
     "babel-core": "^7.0.0-bridge.0",
     "isomorphic-fetch": "^2.2.1",
-    "ml-visjs-graph": "^0.5.1",
     "regenerator-runtime": "^0.12.1"
   },
   "jest": {

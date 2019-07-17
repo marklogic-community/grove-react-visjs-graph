@@ -1,10 +1,10 @@
 import React from 'react';
 import isEqual from 'lodash.isequal';
 
-import * as mlvisjs from 'ml-visjs-graph';
 import 'vis/dist/vis.css';
-import 'ml-visjs-graph/dist/ml-visjs-graph.js.css';
+import vis from 'vis';
 
+/*
 const template = `
   <div class="row mlvisjs-graph default-style">
     <div class="col-md-12 graph-controls">
@@ -31,30 +31,179 @@ const template = `
     <vis-network class="col-md-12"></vis-network>
   </div>
 `;
+*/
+
+const defaultChartOptions = {
+  nodes: {
+    font: {
+      strokeWidth: 0,
+      size: 30,
+      background: '#f4f4f4'
+    },
+    size: 40,
+    margin: 20,
+    shape: 'circle'
+    // shape: 'circularImage'
+  },
+  edges: {
+    font: {
+      size: 10,
+      align: 'bottom'
+    },
+    width: 3,
+    color: {
+      inherit: 'both'
+    }
+  },
+  layout: {
+    randomSeed: 2
+  },
+  physics: {
+    enabled: true,
+    forceAtlas2Based: {
+      gravitationalConstant: -50,
+      centralGravity: 0.01,
+      springConstant: 0.08,
+      springLength: 100,
+      damping: 0.4,
+      avoidOverlap: 1
+    },
+    solver: 'forceAtlas2Based'
+  }
+};
+
+const defaultOrbOptions = {
+  type: 'text',
+  size: 20,
+  padding: 4,
+  textColor: '#222',
+  startPos(node, orb) {
+    return [
+      node.x + node.baseSize - orb.size / 2,
+      node.y - node.baseSize + orb.size / 2
+    ];
+  },
+  endPos(node, orb) {
+    return [
+      node.x + node.baseSize - orb.size / 2,
+      node.y - node.baseSize + orb.size / 2
+    ];
+  },
+  color: 'rgb(0, 220, 240)'
+};
+
+function drawBackground(ctx, orb, startPos, endPos) {
+  ctx.strokeStyle = orb.color;
+  ctx.lineWidth = orb.size + orb.padding;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(...startPos);
+  ctx.lineTo(...endPos);
+  ctx.stroke();
+  ctx.fill();
+}
+
+function drawOrbs(ctx, node, rawNode) {
+  for (let orb of rawNode.orbs) {
+    orb = Object.assign({}, defaultOrbOptions, orb);
+    const startPos = orb.startPos(node, orb);
+    let image;
+    if (orb.type === 'icon') {
+      image = new Image(orb.size * 0.75, orb.size * 0.75);
+      image.src = orb.icon;
+      drawBackground(ctx, orb, startPos, startPos);
+      ctx.fillStyle = orb.textColor;
+      ctx.drawImage(
+        image,
+        startPos[0] - size / 2,
+        startPos[1] - size / 2,
+        orb.size,
+        orb.size
+      );
+      ctx.fill();
+    } else if (orb.type === 'text') {
+      ctx.font = `bold ${orb.size}px sans-serif`;
+      const width = ctx.measureText(orb.label).width;
+      const endPos = [startPos[0] + width, startPos[1]];
+      drawBackground(ctx, orb, startPos, endPos);
+      ctx.fillStyle = orb.textColor;
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(orb.label, startPos[0], startPos[1] + orb.size / 2 + 1);
+      ctx.fill();
+    }
+  }
+}
 
 // TODO: add ErrorBoundary
 class Graph extends React.Component {
   constructor(props) {
     super(props);
-    this.container = React.createRef();
+    this.networkElem = React.createRef();
+    this.state = {
+      shadowData: {
+        nodes: props.nodes,
+        edges: props.edges
+      }
+    };
+    this.createGraph = this.createGraph.bind(this);
+    this.setupDefaultChartEvents = this.setupDefaultChartEvents.bind(this);
   }
 
   componentDidMount() {
     this.createGraph();
   }
 
+  mergedOptions() {
+    return Object.assign(defaultChartOptions, this.props.options);
+  }
+
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.data, this.props.data)) {
-      this.mlVisjsGraph.network.setData(
-        this.props.data.nodes,
-        null,
-        this.props.data.edges,
-        null
-      );
+      this.state.network.setData({
+        nodes: this.props.data.nodes,
+        edges: this.props.data.edges
+      });
+    }
+    if (!isEqual(prevProps.options, this.props.options)) {
+      if (this.state.network) {
+        this.state.network.setOptions(this.mergedOptions());
+      }
     }
   }
 
+  setupDefaultChartEvents(network) {
+    network.on('afterDrawing', ctx => {
+      for (let id in network.body.nodes) {
+        if (network.body.nodes.hasOwnProperty(id)) {
+          const node = network.body.nodes[id];
+          const rawNode = network.body.data.nodes._data[id];
+          if (rawNode) {
+            if (rawNode.orbs) {
+              drawOrbs(ctx, node, rawNode);
+            } else if (rawNode.group) {
+              const group = this.props.options.groups[rawNode.group];
+              if (group && group.orbs) {
+                drawOrbs(ctx, Object.assign({}, group, node));
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
   createGraph() {
+    // TODO: consider using vis.DataSet for data https://visjs.org/docs/data/dataset.html
+    const network = new vis.Network(
+      this.networkElem.current,
+      this.props.data,
+      this.mergedOptions()
+    );
+    this.setState({
+      network
+    });
+    this.setupDefaultChartEvents(network);
+    /* TOOD: Replace this with plain vis.js
     this.mlVisjsGraph = new mlvisjs.Graph(
       this.container.current,
       null, // templateUri
@@ -88,11 +237,25 @@ class Graph extends React.Component {
         }
       }
     );
+    */
   }
 
   render() {
-    return <div ref={this.container} />;
+    return <div ref={this.networkElem} style={this.props.chartStyle} />;
   }
 }
+
+Graph.defaultProps = {
+  data: {
+    nodes: [],
+    edges: []
+  },
+  chartStyle: {
+    width: '100%',
+    height: '600px',
+    border: '1px solid #C0C0C0',
+    position: 'relative'
+  }
+};
 
 export default Graph;
