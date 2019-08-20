@@ -4,6 +4,9 @@ import isEqual from 'lodash.isequal';
 import 'vis/dist/vis.css';
 import vis from 'vis';
 
+import ContextMenu from './ContextMenu';
+import { runInThisContext } from 'vm';
+
 /*
 const template = `
   <div class="row mlvisjs-graph default-style">
@@ -140,6 +143,7 @@ class Graph extends React.Component {
     super(props);
     this.networkElem = React.createRef();
     this.state = {
+      contextMenu: null,
       shadowData: {
         nodes: props.nodes,
         edges: props.edges
@@ -172,6 +176,27 @@ class Graph extends React.Component {
   }
 
   setupDefaultChartEvents(network) {
+    // default is noop
+    let setContextMenu = () => {};
+    const closeContextMenu = () => this.setState({ contextMenu: null });
+    if (Array.isArray(this.props.contextMenuActions)) {
+      setContextMenu = (node, nodeData, coordinates) => {
+        if (node !== null) {
+          this.setState({
+            contextMenu: (
+              <ContextMenu
+                coordinates={coordinates}
+                data={{ network, node, nodeData }}
+                close={closeContextMenu}
+                actions={this.props.contextMenuActions}
+              />
+            )
+          });
+        } else {
+          closeContextMenu();
+        }
+      };
+    }
     network.on('afterDrawing', ctx => {
       for (let id in network.body.nodes) {
         if (network.body.nodes.hasOwnProperty(id)) {
@@ -190,6 +215,37 @@ class Graph extends React.Component {
         }
       }
     });
+    ['zoom', 'click'].forEach(name => {
+      network.on(name, () => {
+        if (this.state.contextMenu !== null) {
+          this.setState({
+            contextMenu: null
+          });
+        }
+      });
+    });
+    network.on('oncontext', params => {
+      params.event.preventDefault();
+      network.stopSimulation();
+      const coordinates = params.pointer.DOM;
+      const targetNodeId = network.getNodeAt(coordinates);
+      if (targetNodeId) {
+        const node = network.body.nodes[targetNodeId];
+        const nodeData = network.body.data.nodes._data[targetNodeId];
+        setContextMenu(node, nodeData, coordinates);
+      } else {
+        setContextMenu(null);
+      }
+      /*
+      let targetNode;
+      if (targetNodeId) {
+        targetNode = nodesSet.get(targetNodeId);
+      }
+      if (targetNode) {
+        setNodeDropdown({ coordinates, targetNode });
+      }
+      */
+    });
   }
 
   createGraph() {
@@ -203,6 +259,9 @@ class Graph extends React.Component {
       network
     });
     this.setupDefaultChartEvents(network);
+    if (this.props.getNetwork) {
+      this.props.getNetwork(network);
+    }
     /* TOOD: Replace this with plain vis.js
     this.mlVisjsGraph = new mlvisjs.Graph(
       this.container.current,
@@ -241,7 +300,11 @@ class Graph extends React.Component {
   }
 
   render() {
-    return <div ref={this.networkElem} style={this.props.chartStyle} />;
+    return (
+      <div ref={this.networkElem} style={this.props.chartStyle}>
+        {this.state.contextMenu}
+      </div>
+    );
   }
 }
 

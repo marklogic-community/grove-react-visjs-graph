@@ -39,12 +39,20 @@ for (let i = 0; i < dummyData.nodes.length; i++) {
   });
 }
 
+const actions = [
+  {
+    text: 'Hide node',
+    action: ({ network, node, nodeData }) => {
+      console.log(node, nodeData);
+    }
+  }
+];
+
 class Demo extends React.Component {
   render() {
     return (
       <>
-        <div>hello</div>
-        <Graph data={dummyData} />
+        <Graph data={dummyData} contextMenuActions={actions} />
       </>
     );
   }
