@@ -180,15 +180,19 @@ class Graph extends React.Component {
     let setContextMenu = () => {};
     const closeContextMenu = () => this.setState({ contextMenu: null });
     if (Array.isArray(this.props.contextMenuActions)) {
-      setContextMenu = (node, nodeData, coordinates) => {
-        if (node !== null) {
+      setContextMenu = (item, itemData, coordinates, type) => {
+        const actions = this.props.contextMenuActions.filter(action => {
+          return action.type === type || action.type === 'all';
+        });
+        if (actions.length > 0) {
           this.setState({
             contextMenu: (
               <ContextMenu
                 coordinates={coordinates}
-                data={{ network, node, nodeData }}
+                data={{ network, item, itemData }}
                 close={closeContextMenu}
-                actions={this.props.contextMenuActions}
+                type={type}
+                actions={actions}
               />
             )
           });
@@ -229,12 +233,17 @@ class Graph extends React.Component {
       network.stopSimulation();
       const coordinates = params.pointer.DOM;
       const targetNodeId = network.getNodeAt(coordinates);
+      const targetEdgeId = network.getEdgeAt(coordinates);
       if (targetNodeId) {
         const node = network.body.nodes[targetNodeId];
         const nodeData = network.body.data.nodes._data[targetNodeId];
-        setContextMenu(node, nodeData, coordinates);
+        setContextMenu(node, nodeData, coordinates, 'node');
+      } else if (targetEdgeId) {
+        const edge = network.body.edges[targetEdgeId];
+        const edgeData = network.body.data.edges._data[targetEdgeId];
+        setContextMenu(edge, edgeData, coordinates, 'edge');
       } else {
-        setContextMenu(null);
+        setContextMenu(null, null, coordinates, 'all');
       }
       /*
       let targetNode;

@@ -14,13 +14,15 @@ for (let i = 0; i < numNodes; i++) {
   dummyData.nodes.push({
     id: `node${i}`,
     label: `node ${i}`,
-    orbs: [{
-      label: 'hello'
-    }]
+    orbs: [
+      {
+        label: 'hello'
+      }
+    ]
   });
 }
 
-function random (size, not) {
+function random(size, not) {
   const r = size => ~~(Math.random() * size);
   if (not === 0) {
     return r(size - 1) + 1;
@@ -42,8 +44,23 @@ for (let i = 0; i < dummyData.nodes.length; i++) {
 const actions = [
   {
     text: 'Hide node',
+    type: 'node',
     action: ({ network, node, nodeData }) => {
       console.log(node, nodeData);
+    }
+  },
+  {
+    text: 'Do not click',
+    type: 'all',
+    action: () => {
+      alert('You have been banned.');
+    }
+  },
+  {
+    text: 'Hide edge',
+    type: 'edge',
+    action: ({ network, edge, edgeData }) => {
+      console.log(edge, edgeData);
     }
   }
 ];

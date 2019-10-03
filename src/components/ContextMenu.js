@@ -61,7 +61,7 @@ ContextMenu.defaultProps = {
         textDecoration: 'none'
       },
       hoverStyle: {
-        background: '#f5f5f5',
+        background: '#ddd',
         padding: '5px',
         boxShadow: '2px 2px #c0c0c0'
       }
