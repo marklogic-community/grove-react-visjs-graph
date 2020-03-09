@@ -46,6 +46,8 @@ const actions = [
     text: 'Hide node',
     type: 'node',
     action: ({ network, node, nodeData }) => {
+      console.log(node, network)
+      node.hidden = true;
       console.log(node, nodeData);
     }
   },
